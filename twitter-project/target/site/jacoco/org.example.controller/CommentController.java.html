@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommentController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.controller</a> &gt; <span class="el_source">CommentController.java</span></div><h1>CommentController.java</h1><pre class="source lang-java linenums">package org.example.controller;
+
+import jakarta.validation.Valid;
+import org.example.dto.comment.CommentCreateRequest;
+import org.example.dto.comment.CommentResponse;
+import org.example.dto.comment.CommentUpdateRequest;
+import org.example.dto.common.ApiResponse;
+import org.example.dto.common.PagedResponse;
+import org.example.service.CommentService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+
+@RestController
+@RequestMapping(&quot;/api/v1/comment&quot;)
+public class CommentController {
+
+    private final CommentService commentService;
+
+<span class="fc" id="L22">    public CommentController(CommentService commentService) {</span>
+<span class="fc" id="L23">        this.commentService = commentService;</span>
+<span class="fc" id="L24">    }</span>
+
+    @GetMapping(&quot;/tweet/{tweetId}&quot;)
+    public ResponseEntity&lt;ApiResponse&lt;PagedResponse&lt;CommentResponse&gt;&gt;&gt; getCommentsByTweetId(
+            @PathVariable Long tweetId,
+            @RequestParam(defaultValue = &quot;0&quot;) int page,
+            @RequestParam(defaultValue = &quot;10&quot;) int size) {
+
+<span class="fc" id="L32">        PagedResponse&lt;CommentResponse&gt; response = commentService.getCommentsByTweetId(tweetId, page, size);</span>
+<span class="fc" id="L33">        return ResponseEntity.ok(ApiResponse.success(response, &quot;Yorumlar getirildi.&quot;));</span>
+    }
+
+
+    @PostMapping
+    public ResponseEntity&lt;ApiResponse&lt;CommentResponse&gt;&gt; createComment(
+            @Valid @RequestBody CommentCreateRequest request,
+            Principal principal) {
+<span class="fc" id="L41">        CommentResponse response = commentService.createComment(request, principal.getName());</span>
+<span class="fc" id="L42">        return ResponseEntity.status(HttpStatus.CREATED)</span>
+<span class="fc" id="L43">                .body(ApiResponse.success(response, &quot;Yorum başarıyla eklendi.&quot;));</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;ApiResponse&lt;CommentResponse&gt;&gt; updateComment(
+            @PathVariable Long id,
+            @Valid @RequestBody CommentUpdateRequest request,
+            Principal principal) {
+<span class="fc" id="L51">        CommentResponse response = commentService.updateComment(id, request, principal.getName());</span>
+<span class="fc" id="L52">        return ResponseEntity.ok(ApiResponse.success(response, &quot;Yorum başarıyla güncellendi.&quot;));</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;ApiResponse&lt;Void&gt;&gt; deleteComment(
+            @PathVariable Long id,
+            Principal principal) {
+<span class="fc" id="L59">        commentService.deleteComment(id, principal.getName());</span>
+<span class="fc" id="L60">        return ResponseEntity.ok(ApiResponse.success(null, &quot;Yorum başarıyla silindi.&quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,54 @@
+.home {
+    width: 100%;
+    min-height: 100vh;
+
+    background-color: #ffffff;
+}
+
+
+/* HEADER */
+
+.home-header {
+    position: sticky;
+    top: 0;
+
+    z-index: 10;
+
+    padding: 16px 20px;
+
+    background-color: rgba(255, 255, 255, 0.95);
+
+    border-bottom: 1px solid #eff3f4;
+
+    backdrop-filter: blur(8px);
+}
+
+.home-header h2 {
+    margin: 0;
+
+    color: #0f1419;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* TWEETS */
+
+.tweet-list {
+    width: 100%;
+}
+
+
+/* LOADING */
+
+.loading,
+.empty-feed {
+    padding: 50px 20px;
+
+    text-align: center;
+
+    color: #536471;
+
+    font-size: 15px;
+}

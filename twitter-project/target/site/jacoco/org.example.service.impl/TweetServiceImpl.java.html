@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TweetServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.service.impl</a> &gt; <span class="el_source">TweetServiceImpl.java</span></div><h1>TweetServiceImpl.java</h1><pre class="source lang-java linenums">package org.example.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.example.dto.common.PagedResponse;
+import org.example.dto.tweet.TweetCreateRequest;
+import org.example.dto.tweet.TweetResponse;
+import org.example.dto.tweet.TweetUpdateRequest;
+import org.example.entity.Like;
+import org.example.entity.Retweet;
+import org.example.entity.Tweet;
+import org.example.entity.User;
+import org.example.exception.ResourceNotFoundException;
+import org.example.exception.UnauthorizedException;
+import org.example.mapper.TweetMapper;
+import org.example.repository.*;
+import org.example.service.TweetService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class TweetServiceImpl implements TweetService {
+
+    private final TweetRepository tweetRepository;
+    private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
+    private final RetweetRepository retweetRepository;
+    private final FollowRepository followRepository;
+    private final TweetMapper tweetMapper;
+    private final CommentRepository commentRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public PagedResponse&lt;TweetResponse&gt; getFeed(
+            int page,
+            int size,
+            String currentUsername) {
+
+<span class="nc" id="L48">        User currentUser = getUserByUsername(currentUsername);</span>
+
+<span class="nc" id="L50">        List&lt;Long&gt; targetUserIds =</span>
+                new ArrayList&lt;&gt;(
+<span class="nc" id="L52">                        followRepository.findFollowingIdsByFollowerId(</span>
+<span class="nc" id="L53">                                currentUser.getId()</span>
+                        )
+                );
+
+<span class="nc" id="L57">        targetUserIds.add(currentUser.getId());</span>
+
+<span class="nc" id="L59">        Pageable pageable = PageRequest.of(page, size);</span>
+
+<span class="nc" id="L61">        Page&lt;Tweet&gt; tweetPage =</span>
+<span class="nc" id="L62">                tweetRepository.findByUserIdInOrderByCreatedAtDesc(</span>
+                        targetUserIds,
+                        pageable
+                );
+
+<span class="nc" id="L67">        List&lt;TweetResponse&gt; content = tweetPage.getContent()</span>
+<span class="nc" id="L68">                .stream()</span>
+<span class="nc" id="L69">                .map(tweet -&gt; {</span>
+
+<span class="nc" id="L71">                    TweetResponse response =</span>
+<span class="nc" id="L72">                            tweetMapper.toResponse(tweet);</span>
+
+<span class="nc" id="L74">                    response.setLikedByCurrentUser(</span>
+<span class="nc" id="L75">                            likeRepository.existsByUserIdAndTweetId(</span>
+<span class="nc" id="L76">                                    currentUser.getId(),</span>
+<span class="nc" id="L77">                                    tweet.getId()</span>
+                            )
+                    );
+
+<span class="nc" id="L81">                    response.setRetweetedByCurrentUser(</span>
+<span class="nc" id="L82">                            retweetRepository.existsByUserIdAndTweetId(</span>
+<span class="nc" id="L83">                                    currentUser.getId(),</span>
+<span class="nc" id="L84">                                    tweet.getId()</span>
+                            )
+                    );
+
+<span class="nc" id="L88">                    return response;</span>
+                })
+<span class="nc" id="L90">                .toList();</span>
+
+<span class="nc" id="L92">        return new PagedResponse&lt;&gt;(</span>
+                content,
+<span class="nc" id="L94">                tweetPage.getNumber(),</span>
+<span class="nc" id="L95">                tweetPage.getSize(),</span>
+<span class="nc" id="L96">                tweetPage.getTotalElements(),</span>
+<span class="nc" id="L97">                tweetPage.getTotalPages(),</span>
+<span class="nc" id="L98">                tweetPage.isLast()</span>
+        );
+    }
+
+    @Override
+    @Transactional
+    public TweetResponse createTweet(TweetCreateRequest request, String currentUsername) {
+<span class="fc" id="L105">        User user = getUserByUsername(currentUsername);</span>
+
+<span class="fc" id="L107">        Tweet tweet = tweetMapper.toEntity(request);</span>
+<span class="fc" id="L108">        tweet.setUser(user);</span>
+
+<span class="fc" id="L110">        Tweet savedTweet = tweetRepository.save(tweet);</span>
+<span class="fc" id="L111">        return tweetMapper.toResponse(savedTweet);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public TweetResponse getTweetById(Long id, Long currentUserId) {
+
+<span class="nc" id="L118">        Tweet tweet = getTweetEntityById(id);</span>
+
+<span class="nc" id="L120">        TweetResponse response = tweetMapper.toResponse(tweet);</span>
+
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (currentUserId != null) {</span>
+<span class="nc" id="L123">            response.setLikedByCurrentUser(</span>
+<span class="nc" id="L124">                    likeRepository.existsByUserIdAndTweetId(</span>
+                            currentUserId,
+                            id
+                    )
+            );
+
+<span class="nc" id="L130">            response.setRetweetedByCurrentUser(</span>
+<span class="nc" id="L131">                    retweetRepository.existsByUserIdAndTweetId(</span>
+                            currentUserId,
+                            id
+                    )
+            );
+        }
+
+<span class="nc" id="L138">        return response;</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PagedResponse&lt;TweetResponse&gt; getAllTweets(
+            int page,
+            int size,
+            Long currentUserId) {
+
+<span class="nc" id="L148">        Pageable pageable =</span>
+<span class="nc" id="L149">                PageRequest.of(</span>
+                        page,
+                        size,
+<span class="nc" id="L152">                        Sort.by(&quot;createdAt&quot;).descending()</span>
+                );
+
+<span class="nc" id="L155">        Page&lt;Tweet&gt; tweetPage =</span>
+<span class="nc" id="L156">                tweetRepository.findAll(pageable);</span>
+
+<span class="nc" id="L158">        List&lt;TweetResponse&gt; content = tweetPage.getContent()</span>
+<span class="nc" id="L159">                .stream()</span>
+<span class="nc" id="L160">                .map(tweet -&gt; {</span>
+
+<span class="nc" id="L162">                    TweetResponse response =</span>
+<span class="nc" id="L163">                            tweetMapper.toResponse(tweet);</span>
+
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                    if (currentUserId != null) {</span>
+
+<span class="nc" id="L167">                        response.setLikedByCurrentUser(</span>
+<span class="nc" id="L168">                                likeRepository.existsByUserIdAndTweetId(</span>
+                                        currentUserId,
+<span class="nc" id="L170">                                        tweet.getId()</span>
+                                )
+                        );
+
+<span class="nc" id="L174">                        response.setRetweetedByCurrentUser(</span>
+<span class="nc" id="L175">                                retweetRepository.existsByUserIdAndTweetId(</span>
+                                        currentUserId,
+<span class="nc" id="L177">                                        tweet.getId()</span>
+                                )
+                        );
+                    }
+
+<span class="nc" id="L182">                    return response;</span>
+                })
+<span class="nc" id="L184">                .toList();</span>
+
+<span class="nc" id="L186">        return new PagedResponse&lt;&gt;(</span>
+                content,
+<span class="nc" id="L188">                tweetPage.getNumber(),</span>
+<span class="nc" id="L189">                tweetPage.getSize(),</span>
+<span class="nc" id="L190">                tweetPage.getTotalElements(),</span>
+<span class="nc" id="L191">                tweetPage.getTotalPages(),</span>
+<span class="nc" id="L192">                tweetPage.isLast()</span>
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PagedResponse&lt;TweetResponse&gt; getTweetsByUserId(
+            Long userId,
+            int page,
+            int size,
+            Long currentUserId) {
+
+<span class="nc" id="L204">        Pageable pageable = PageRequest.of(page, size);</span>
+
+<span class="nc" id="L206">        Page&lt;Tweet&gt; tweetPage =</span>
+<span class="nc" id="L207">                tweetRepository.findByUserIdOrderByCreatedAtDesc(</span>
+                        userId,
+                        pageable
+                );
+
+<span class="nc" id="L212">        List&lt;TweetResponse&gt; content = tweetPage.getContent()</span>
+<span class="nc" id="L213">                .stream()</span>
+<span class="nc" id="L214">                .map(tweet -&gt; {</span>
+
+<span class="nc" id="L216">                    TweetResponse response =</span>
+<span class="nc" id="L217">                            tweetMapper.toResponse(tweet);</span>
+
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                    if (currentUserId != null) {</span>
+
+<span class="nc" id="L221">                        response.setLikedByCurrentUser(</span>
+<span class="nc" id="L222">                                likeRepository.existsByUserIdAndTweetId(</span>
+                                        currentUserId,
+<span class="nc" id="L224">                                        tweet.getId()</span>
+                                )
+                        );
+
+<span class="nc" id="L228">                        response.setRetweetedByCurrentUser(</span>
+<span class="nc" id="L229">                                retweetRepository.existsByUserIdAndTweetId(</span>
+                                        currentUserId,
+<span class="nc" id="L231">                                        tweet.getId()</span>
+                                )
+                        );
+                    }
+
+<span class="nc" id="L236">                    return response;</span>
+                })
+<span class="nc" id="L238">                .toList();</span>
+
+<span class="nc" id="L240">        return new PagedResponse&lt;&gt;(</span>
+                content,
+<span class="nc" id="L242">                tweetPage.getNumber(),</span>
+<span class="nc" id="L243">                tweetPage.getSize(),</span>
+<span class="nc" id="L244">                tweetPage.getTotalElements(),</span>
+<span class="nc" id="L245">                tweetPage.getTotalPages(),</span>
+<span class="nc" id="L246">                tweetPage.isLast()</span>
+        );
+    }
+
+    @Override
+    @Transactional
+    public TweetResponse updateTweet(Long id, TweetUpdateRequest request, Long currentUserId) {
+<span class="nc" id="L253">        Tweet tweet = getTweetEntityById(id);</span>
+
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        if (!tweet.getUser().getId().equals(currentUserId)) {</span>
+<span class="nc" id="L256">            throw new UnauthorizedException(&quot;Bu tweeti güncelleme yetkiniz yok.&quot;);</span>
+        }
+
+<span class="nc" id="L259">        tweet.setContent(request.getContent());</span>
+<span class="nc" id="L260">        Tweet updatedTweet = tweetRepository.save(tweet);</span>
+
+<span class="nc" id="L262">        return tweetMapper.toResponse(updatedTweet);</span>
+    }
+    @Override
+    @Transactional
+    public void deleteTweet(Long tweetId, Long userId) {
+
+<span class="fc" id="L268">        Tweet tweet = tweetRepository.findById(tweetId)</span>
+<span class="fc" id="L269">                .orElseThrow(() -&gt;</span>
+<span class="nc" id="L270">                        new ResourceNotFoundException(</span>
+                                &quot;Tweet bulunamadı: &quot; + tweetId
+                        )
+                );
+
+
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (!tweet.getUser().getId().equals(userId)) {</span>
+<span class="fc" id="L277">            throw new ResponseStatusException(</span>
+                    HttpStatus.FORBIDDEN,
+                    &quot;Bu tweeti silme yetkiniz yok.&quot;
+            );
+        }
+
+
+<span class="fc" id="L284">        commentRepository.deleteByTweetId(tweetId);</span>
+<span class="fc" id="L285">        likeRepository.deleteByTweetId(tweetId);</span>
+<span class="fc" id="L286">        retweetRepository.deleteByTweetId(tweetId);</span>
+
+
+<span class="fc" id="L289">        tweetRepository.delete(tweet);</span>
+<span class="fc" id="L290">    }</span>
+
+    @Override
+    @Transactional
+    public TweetResponse likeTweet(Long tweetId, String currentUsername) {
+<span class="nc" id="L295">        User user = getUserByUsername(currentUsername);</span>
+<span class="nc" id="L296">        Tweet tweet = getTweetEntityById(tweetId);</span>
+
+
+<span class="nc" id="L299">        boolean alreadyLiked = likeRepository.existsByUserIdAndTweetId(user.getId(), tweet.getId());</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">        if (!alreadyLiked) {</span>
+<span class="nc" id="L301">            Like like = Like.builder()</span>
+<span class="nc" id="L302">                    .user(user)</span>
+<span class="nc" id="L303">                    .tweet(tweet)</span>
+<span class="nc" id="L304">                    .build();</span>
+<span class="nc" id="L305">            likeRepository.save(like);</span>
+        }
+
+<span class="nc" id="L308">        return tweetMapper.toResponse(tweet);</span>
+    }
+
+    @Override
+    @Transactional
+    public TweetResponse unlikeTweet(Long tweetId, String currentUsername) {
+<span class="nc" id="L314">        User user = getUserByUsername(currentUsername);</span>
+<span class="nc" id="L315">        Tweet tweet = getTweetEntityById(tweetId);</span>
+
+
+<span class="nc" id="L318">        likeRepository.deleteByUserIdAndTweetId(user.getId(), tweet.getId());</span>
+
+<span class="nc" id="L320">        return tweetMapper.toResponse(tweet);</span>
+    }
+
+    @Override
+    @Transactional
+    public TweetResponse retweet(Long tweetId, String currentUsername) {
+<span class="nc" id="L326">        User user = getUserByUsername(currentUsername);</span>
+<span class="nc" id="L327">        Tweet tweet = getTweetEntityById(tweetId);</span>
+
+<span class="nc" id="L329">        boolean alreadyRetweeted = retweetRepository.existsByUserIdAndTweetId(user.getId(), tweet.getId());</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">        if (alreadyRetweeted) {</span>
+
+<span class="nc" id="L332">            retweetRepository.deleteByUserIdAndTweetId(user.getId(), tweet.getId());</span>
+        } else {
+<span class="nc" id="L334">            Retweet retweet = Retweet.builder()</span>
+<span class="nc" id="L335">                    .user(user)</span>
+<span class="nc" id="L336">                    .tweet(tweet)</span>
+<span class="nc" id="L337">                    .build();</span>
+<span class="nc" id="L338">            retweetRepository.save(retweet);</span>
+        }
+
+<span class="nc" id="L341">        return tweetMapper.toResponse(tweet);</span>
+    }
+
+    private User getUserByUsername(String username) {
+<span class="fc" id="L345">        return userRepository.findByUsername(username)</span>
+<span class="pc" id="L346">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Kullanıcı bulunamadı: &quot; + username));</span>
+    }
+
+    private Tweet getTweetEntityById(Long id) {
+<span class="nc" id="L350">        return tweetRepository.findById(id)</span>
+<span class="nc" id="L351">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Tweet bulunamadı: &quot; + id));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

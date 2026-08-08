@@ -1,0 +1,45 @@
+.feed{
+    width:100%;
+    min-height:100vh;
+    background:#fff;
+}
+
+.feed-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+
+    backdrop-filter:blur(12px);
+    background:rgba(255,255,255,.85);
+
+    border-bottom:1px solid #EFF3F4;
+
+    padding:16px 20px;
+}
+
+.feed-header h2{
+    font-size:20px;
+    font-weight:700;
+    color:#0f1419;
+}
+
+.loading,
+.empty-feed{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    height:180px;
+
+    color:#536471;
+    font-size:16px;
+
+}
+
+.tweet-list{
+
+    display:flex;
+    flex-direction:column;
+
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LikeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.controller</a> &gt; <span class="el_source">LikeController.java</span></div><h1>LikeController.java</h1><pre class="source lang-java linenums">package org.example.controller;
+
+import org.example.dto.common.ApiResponse;
+import org.example.service.LikeService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+
+@RestController
+@RequestMapping(&quot;/api/v1/likes&quot;)
+public class LikeController {
+
+    private final LikeService likeService;
+
+<span class="nc" id="L16">    public LikeController(LikeService likeService) {</span>
+<span class="nc" id="L17">        this.likeService = likeService;</span>
+<span class="nc" id="L18">    }</span>
+
+
+    @PostMapping(&quot;/tweet/{tweetId}&quot;)
+    public ResponseEntity&lt;ApiResponse&lt;Void&gt;&gt; likeTweet(
+            @PathVariable Long tweetId,
+            Principal principal) {
+<span class="nc" id="L25">        likeService.likeTweet(tweetId, principal.getName());</span>
+<span class="nc" id="L26">        return ResponseEntity.ok(ApiResponse.success(null, &quot;Tweet beğenildi.&quot;));</span>
+    }
+
+
+    @DeleteMapping(&quot;/tweet/{tweetId}&quot;)
+    public ResponseEntity&lt;ApiResponse&lt;Void&gt;&gt; unlikeTweet(
+            @PathVariable Long tweetId,
+            Principal principal) {
+<span class="nc" id="L34">        likeService.unlikeTweet(tweetId, principal.getName());</span>
+<span class="nc" id="L35">        return ResponseEntity.ok(ApiResponse.success(null, &quot;Beğeni geri çekildi.&quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

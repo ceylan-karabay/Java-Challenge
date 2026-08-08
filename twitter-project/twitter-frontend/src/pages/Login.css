@@ -1,0 +1,116 @@
+.login-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #15202b;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    background-color: #192734;
+    border-radius: 16px;
+    padding: 32px;
+    box-sizing: border-box;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.login-card h1 {
+    color: white;
+    text-align: center;
+    margin: 0 0 8px;
+    font-size: 28px;
+}
+
+.login-subtitle {
+    color: #8899a6;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    box-sizing: border-box;
+    border: 1px solid #38444d;
+    border-radius: 8px;
+    background-color: #253341;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #1d9bf0;
+}
+
+.form-group input::placeholder {
+    color: #8899a6;
+}
+
+.login-card form > button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 999px;
+    background-color: #1d9bf0;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.login-card form > button:hover {
+    background-color: #1a8cd8;
+}
+
+.login-card form > button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.login-error {
+    background-color: rgba(244, 33, 46, 0.15);
+    border: 1px solid #f4212e;
+    color: #f4212e;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.register-link {
+    text-align: center;
+    color: #8899a6;
+    margin-top: 24px;
+}
+
+.register-link button {
+    background: none;
+    border: none;
+    color: #1d9bf0;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: inherit;
+}
+
+.register-link button:hover {
+    text-decoration: underline;
+}

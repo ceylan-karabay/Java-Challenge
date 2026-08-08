@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.service.impl</a> &gt; <span class="el_source">AuthServiceImpl.java</span></div><h1>AuthServiceImpl.java</h1><pre class="source lang-java linenums">package org.example.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.example.dto.auth.AuthResponse;
+import org.example.dto.auth.LoginRequest;
+import org.example.dto.auth.RegisterRequest;
+import org.example.dto.user.UserSummaryResponse;
+import org.example.entity.User;
+import org.example.exception.BadRequestException;
+import org.example.exception.ResourceNotFoundException;
+import org.example.mapper.UserMapper;
+import org.example.repository.UserRepository;
+import org.example.security.JwtUtils;
+import org.example.service.AuthService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class AuthServiceImpl implements AuthService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+    private final UserMapper userMapper;
+
+    @Override
+    @Transactional
+    public String register(RegisterRequest request) {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (userRepository.existsByUsername(request.getUsername())) {</span>
+<span class="fc" id="L35">            throw new BadRequestException(&quot;Bu kullanıcı adı daha önce alınmış.&quot;);</span>
+        }
+
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (userRepository.existsByEmail(request.getEmail())) {</span>
+<span class="nc" id="L39">            throw new BadRequestException(&quot;Bu email zaten kullanılıyor.&quot;);</span>
+        }
+
+<span class="fc" id="L42">        User user = User.builder()</span>
+<span class="fc" id="L43">                .username(request.getUsername())</span>
+<span class="fc" id="L44">                .email(request.getEmail())</span>
+<span class="fc" id="L45">                .password(passwordEncoder.encode(request.getPassword()))</span>
+<span class="fc" id="L46">                .build();</span>
+
+<span class="fc" id="L48">        userRepository.save(user);</span>
+<span class="fc" id="L49">        return &quot;Kullanıcı başarıyla kaydedildi.&quot;;</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AuthResponse login(LoginRequest request) {
+
+<span class="nc" id="L56">        authenticationManager.authenticate(</span>
+<span class="nc" id="L57">                new UsernamePasswordAuthenticationToken(request.getUsernameOrEmail(), request.getPassword())</span>
+        );
+
+<span class="nc" id="L60">        User user = userRepository.findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())</span>
+<span class="nc" id="L61">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Kullanıcı bulunamadı: &quot; + request.getUsernameOrEmail()));</span>
+
+<span class="nc" id="L63">        String accessToken = jwtUtils.generateToken(user.getUsername());</span>
+
+<span class="nc" id="L65">        UserSummaryResponse userSummary = userMapper.toSummaryResponse(user);</span>
+
+<span class="nc" id="L67">        return AuthResponse.builder()</span>
+<span class="nc" id="L68">                .accessToken(accessToken)</span>
+<span class="nc" id="L69">                .tokenType(&quot;Bearer&quot;)</span>
+<span class="nc" id="L70">                .user(userSummary)</span>
+<span class="nc" id="L71">                .build();</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long getUserIdByUsername(String username) {
+<span class="nc" id="L77">        return userRepository.findByUsername(username)</span>
+<span class="nc" id="L78">                .map(User::getId)</span>
+<span class="nc" id="L79">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Kullanıcı bulunamadı: &quot; + username));</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserByUsername(String username) {
+<span class="nc" id="L85">        return userRepository.findByUsername(username)</span>
+<span class="nc" id="L86">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Kullanıcı bulunamadı: &quot; + username));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

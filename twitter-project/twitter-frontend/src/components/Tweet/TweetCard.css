@@ -1,0 +1,178 @@
+.tweet-card {
+    display: flex;
+
+    gap: 12px;
+
+    padding: 16px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #eff3f4;
+}
+
+.tweet-card:hover {
+    background-color: #fafafa;
+}
+
+
+/* AVATAR */
+
+.tweet-avatar {
+    flex-shrink: 0;
+}
+
+.tweet-avatar img,
+.tweet-avatar-placeholder {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+}
+
+.tweet-avatar img {
+    object-fit: cover;
+}
+
+.tweet-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #1d9bf0;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+/* MAIN */
+
+.tweet-main {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+/* HEADER */
+
+.tweet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.tweet-author {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 0;
+}
+
+.tweet-author strong {
+    color: #0f1419;
+
+    font-size: 15px;
+}
+
+.tweet-author span {
+    color: #536471;
+
+    font-size: 14px;
+}
+
+.tweet-header time {
+    color: #536471;
+
+    font-size: 13px;
+
+    white-space: nowrap;
+}
+
+
+/* CONTENT */
+
+.tweet-text {
+    margin: 8px 0 14px;
+
+    color: #0f1419;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    word-break: break-word;
+}
+
+
+/* MEDIA */
+
+.tweet-media {
+    width: 100%;
+    max-height: 400px;
+
+    margin-bottom: 12px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+}
+
+
+/* ACTIONS */
+
+.tweet-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    max-width: 500px;
+}
+
+.tweet-action {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px;
+
+    border: none;
+    border-radius: 999px;
+
+    background: transparent;
+
+    color: #536471;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.tweet-action:hover {
+    background-color: #f3f4f6;
+}
+
+.tweet-action:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+.tweet-action.liked {
+    color: #ef4444;
+}
+
+.tweet-action.retweeted {
+    color: #16a34a;
+}
+
+.delete-action {
+    color: #ef4444;
+}

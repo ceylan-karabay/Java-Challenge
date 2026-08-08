@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.mapper</a> &gt; <span class="el_source">UserMapperImpl.java</span></div><h1>UserMapperImpl.java</h1><pre class="source lang-java linenums">package org.example.mapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.processing.Generated;
+import org.example.dto.auth.RegisterRequest;
+import org.example.dto.user.UserResponse;
+import org.example.dto.user.UserSummaryResponse;
+import org.example.dto.user.UserUpdateRequest;
+import org.example.entity.User;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+    date = &quot;2026-08-09T01:16:46+0300&quot;,
+    comments = &quot;version: 1.5.5.Final, compiler: javac, environment: Java 17.0.20 (Microsoft)&quot;
+)
+@Component
+<span class="nc" id="L19">public class UserMapperImpl implements UserMapper {</span>
+
+    @Override
+    public void updateUserFromRequest(UserUpdateRequest request, User user) {
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        if ( request == null ) {</span>
+<span class="nc" id="L24">            return;</span>
+        }
+
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if ( request.getBio() != null ) {</span>
+<span class="nc" id="L28">            user.setBio( request.getBio() );</span>
+        }
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if ( request.getProfileImageUrl() != null ) {</span>
+<span class="nc" id="L31">            user.setProfileImageUrl( request.getProfileImageUrl() );</span>
+        }
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if ( request.getBannerImageUrl() != null ) {</span>
+<span class="nc" id="L34">            user.setBannerImageUrl( request.getBannerImageUrl() );</span>
+        }
+<span class="nc" id="L36">    }</span>
+
+    @Override
+    public UserResponse toResponse(User user) {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if ( user == null ) {</span>
+<span class="nc" id="L41">            return null;</span>
+        }
+
+<span class="nc" id="L44">        UserResponse.UserResponseBuilder userResponse = UserResponse.builder();</span>
+
+<span class="nc" id="L46">        userResponse.id( user.getId() );</span>
+<span class="nc" id="L47">        userResponse.username( user.getUsername() );</span>
+<span class="nc" id="L48">        userResponse.email( user.getEmail() );</span>
+<span class="nc" id="L49">        userResponse.bio( user.getBio() );</span>
+<span class="nc" id="L50">        userResponse.profileImageUrl( user.getProfileImageUrl() );</span>
+<span class="nc" id="L51">        userResponse.bannerImageUrl( user.getBannerImageUrl() );</span>
+<span class="nc" id="L52">        userResponse.createdAt( user.getCreatedAt() );</span>
+
+<span class="nc" id="L54">        return userResponse.build();</span>
+    }
+
+    @Override
+    public UserSummaryResponse toSummaryResponse(User user) {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if ( user == null ) {</span>
+<span class="nc" id="L60">            return null;</span>
+        }
+
+<span class="nc" id="L63">        UserSummaryResponse.UserSummaryResponseBuilder userSummaryResponse = UserSummaryResponse.builder();</span>
+
+<span class="nc" id="L65">        userSummaryResponse.id( user.getId() );</span>
+<span class="nc" id="L66">        userSummaryResponse.username( user.getUsername() );</span>
+<span class="nc" id="L67">        userSummaryResponse.profileImageUrl( user.getProfileImageUrl() );</span>
+
+<span class="nc" id="L69">        return userSummaryResponse.build();</span>
+    }
+
+    @Override
+    public List&lt;UserSummaryResponse&gt; toSummaryResponseList(List&lt;User&gt; users) {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if ( users == null ) {</span>
+<span class="nc" id="L75">            return null;</span>
+        }
+
+<span class="nc" id="L78">        List&lt;UserSummaryResponse&gt; list = new ArrayList&lt;UserSummaryResponse&gt;( users.size() );</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        for ( User user : users ) {</span>
+<span class="nc" id="L80">            list.add( toSummaryResponse( user ) );</span>
+<span class="nc" id="L81">        }</span>
+
+<span class="nc" id="L83">        return list;</span>
+    }
+
+    @Override
+    public User toEntity(RegisterRequest request) {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if ( request == null ) {</span>
+<span class="nc" id="L89">            return null;</span>
+        }
+
+<span class="nc" id="L92">        User.UserBuilder user = User.builder();</span>
+
+<span class="nc" id="L94">        user.username( request.getUsername() );</span>
+<span class="nc" id="L95">        user.email( request.getEmail() );</span>
+<span class="nc" id="L96">        user.password( request.getPassword() );</span>
+
+<span class="nc" id="L98">        return user.build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,102 @@
+/* =========================
+   COMMENT COMPOSER
+========================= */
+
+.comment-composer {
+    width: 100%;
+    padding: 16px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+/* =========================
+   TEXTAREA
+========================= */
+
+.comment-composer textarea {
+    display: block;
+
+    width: 100%;
+    min-height: 70px;
+
+    padding: 10px 0;
+
+    box-sizing: border-box;
+
+    resize: none;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #0f1419;
+
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.comment-composer textarea::placeholder {
+    color: #536471;
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.comment-composer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 8px;
+}
+
+
+/* =========================
+   CHARACTER COUNT
+========================= */
+
+.comment-composer-bottom span {
+    color: #536471;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   REPLY BUTTON
+========================= */
+
+.comment-composer-bottom button {
+    border: none;
+    border-radius: 999px;
+
+    padding: 9px 18px;
+
+    background: #1d9bf0;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s;
+}
+
+.comment-composer-bottom button:hover {
+    background: #1a8cd8;
+}
+
+.comment-composer-bottom button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

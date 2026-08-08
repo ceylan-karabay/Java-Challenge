@@ -1,0 +1,155 @@
+.tweet-composer {
+    width: 100%;
+    padding: 16px 20px;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    background: #ffffff;
+}
+
+.tweet-composer form {
+    width: 100%;
+}
+
+
+/* TEXTAREA */
+
+.tweet-composer textarea {
+    width: 100%;
+
+    min-height: 90px;
+
+    padding: 8px 0;
+
+    resize: none;
+
+    border: none;
+    outline: none;
+
+    box-sizing: border-box;
+
+    font-size: 18px;
+    font-family: inherit;
+
+    color: #0f1419;
+
+    background: transparent;
+}
+
+.tweet-composer textarea::placeholder {
+    color: #9ca3af;
+}
+
+
+/* FOOTER */
+
+.tweet-composer-footer {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 10px;
+}
+
+
+/* CHARACTER COUNT */
+
+.character-count {
+    color: #6b7280;
+
+    font-size: 14px;
+
+    flex-shrink: 0;
+}
+
+
+/* BUTTON */
+
+.tweet-composer button {
+    width: 90px;
+    min-width: 90px;
+
+    height: 44px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 999px;
+
+    background: #1d9bf0;
+    color: white;
+
+    font-size: 0;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+
+/* POST YAZISI */
+
+.tweet-composer button::after {
+    content: "POST";
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+/* HOVER */
+
+.tweet-composer button:hover:not(:disabled) {
+    background: #1a8cd8;
+}
+
+
+/* DISABLED */
+
+.tweet-composer button:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+
+/* GÖNDERİLİYOR DURUMUNDA */
+
+.tweet-composer button:disabled::after {
+    content: "POST";
+}
+
+
+/* DAR EKRAN */
+
+@media (max-width: 650px) {
+
+    .tweet-composer {
+        padding: 14px 16px;
+    }
+
+    .tweet-composer textarea {
+        min-height: 80px;
+        font-size: 17px;
+    }
+
+    .tweet-composer button {
+        width: 80px;
+        min-width: 80px;
+    }
+}
+.tweet-composer button:hover {
+    background: #1689d8;
+}
+
+.tweet-composer button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

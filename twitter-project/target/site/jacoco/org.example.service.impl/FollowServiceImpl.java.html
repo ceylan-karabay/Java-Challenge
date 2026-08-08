@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FollowServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.service.impl</a> &gt; <span class="el_source">FollowServiceImpl.java</span></div><h1>FollowServiceImpl.java</h1><pre class="source lang-java linenums">package org.example.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.example.dto.common.PagedResponse;
+import org.example.dto.user.UserSummaryResponse;
+import org.example.entity.Follow;
+import org.example.entity.User;
+import org.example.exception.BadRequestException;
+import org.example.exception.ResourceNotFoundException;
+import org.example.mapper.UserMapper;
+import org.example.repository.FollowRepository;
+import org.example.repository.UserRepository;
+import org.example.service.FollowService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class FollowServiceImpl implements FollowService {
+
+    private final FollowRepository followRepository;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+    @Override
+    @Transactional
+    public void followUser(Long targetUserId, String currentUsername) {
+<span class="fc" id="L33">        User follower = getUserByUsername(currentUsername);</span>
+
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (follower.getId().equals(targetUserId)) {</span>
+<span class="fc" id="L36">            throw new BadRequestException(&quot;Kullanıcı kendisini takip edemez.&quot;);</span>
+        }
+
+
+<span class="nc" id="L40">        User targetUser = userRepository.findById(targetUserId)</span>
+<span class="nc" id="L41">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Takip edilecek kullanıcı bulunamadı: &quot; + targetUserId));</span>
+
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (followRepository.existsByFollowerIdAndFollowingId(follower.getId(), targetUserId)) {</span>
+<span class="nc" id="L44">            throw new BadRequestException(&quot;Bu kullanıcıyı zaten takip ediyorsunuz.&quot;);</span>
+        }
+
+<span class="nc" id="L47">        Follow follow = Follow.builder()</span>
+<span class="nc" id="L48">                .follower(follower)</span>
+<span class="nc" id="L49">                .following(targetUser)</span>
+<span class="nc" id="L50">                .build();</span>
+
+<span class="nc" id="L52">        followRepository.save(follow);</span>
+<span class="nc" id="L53">    }</span>
+
+    @Override
+    @Transactional
+    public void unfollowUser(Long targetUserId, String currentUsername) {
+<span class="fc" id="L58">        User follower = getUserByUsername(currentUsername);</span>
+
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (!followRepository.existsByFollowerIdAndFollowingId(follower.getId(), targetUserId)) {</span>
+<span class="nc" id="L61">            throw new BadRequestException(&quot;Bu kullanıcıyı zaten takip etmiyorsunuz.&quot;);</span>
+        }
+
+
+<span class="fc" id="L65">        followRepository.deleteByFollowerIdAndFollowingId(follower.getId(), targetUserId);</span>
+<span class="fc" id="L66">    }</span>
+
+    @Override
+    @Transactional(readOnly = true)
+    public PagedResponse&lt;UserSummaryResponse&gt; getFollowers(Long userId, int page, int size) {
+<span class="nc" id="L71">        validateUserExists(userId);</span>
+
+<span class="nc" id="L73">        Pageable pageable = PageRequest.of(page, size);</span>
+
+<span class="nc" id="L75">        Page&lt;Follow&gt; followPage = followRepository.findByFollowingId(userId, pageable);</span>
+
+<span class="nc" id="L77">        List&lt;UserSummaryResponse&gt; content = followPage.getContent().stream()</span>
+<span class="nc" id="L78">                .map(follow -&gt; userMapper.toSummaryResponse(follow.getFollower()))</span>
+<span class="nc" id="L79">                .toList();</span>
+
+<span class="nc" id="L81">        return new PagedResponse&lt;&gt;(</span>
+                content,
+<span class="nc" id="L83">                followPage.getNumber(),</span>
+<span class="nc" id="L84">                followPage.getSize(),</span>
+<span class="nc" id="L85">                followPage.getTotalElements(),</span>
+<span class="nc" id="L86">                followPage.getTotalPages(),</span>
+<span class="nc" id="L87">                followPage.isLast()</span>
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PagedResponse&lt;UserSummaryResponse&gt; getFollowing(Long userId, int page, int size) {
+<span class="nc" id="L94">        validateUserExists(userId);</span>
+
+<span class="nc" id="L96">        Pageable pageable = PageRequest.of(page, size);</span>
+
+<span class="nc" id="L98">        Page&lt;Follow&gt; followPage = followRepository.findByFollowerId(userId, pageable);</span>
+
+<span class="nc" id="L100">        List&lt;UserSummaryResponse&gt; content = followPage.getContent().stream()</span>
+<span class="nc" id="L101">                .map(follow -&gt; userMapper.toSummaryResponse(follow.getFollowing()))</span>
+<span class="nc" id="L102">                .toList();</span>
+
+<span class="nc" id="L104">        return new PagedResponse&lt;&gt;(</span>
+                content,
+<span class="nc" id="L106">                followPage.getNumber(),</span>
+<span class="nc" id="L107">                followPage.getSize(),</span>
+<span class="nc" id="L108">                followPage.getTotalElements(),</span>
+<span class="nc" id="L109">                followPage.getTotalPages(),</span>
+<span class="nc" id="L110">                followPage.isLast()</span>
+        );
+    }
+
+
+
+    private User getUserByUsername(String username) {
+<span class="fc" id="L117">        return userRepository.findByUsername(username)</span>
+<span class="pc" id="L118">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Kullanıcı bulunamadı: &quot; + username));</span>
+    }
+
+    private void validateUserExists(Long userId) {
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (!userRepository.existsById(userId)) {</span>
+<span class="nc" id="L123">            throw new ResourceNotFoundException(&quot;Kullanıcı bulunamadı: &quot; + userId);</span>
+        }
+<span class="nc" id="L125">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

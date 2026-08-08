@@ -1,0 +1,282 @@
+/* =========================
+   COMMENT SECTION
+========================= */
+
+.comment-section {
+    width: 100%;
+
+    margin-top: 0;
+    padding: 12px 16px 0;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+
+/* =========================
+   COMMENT FORM
+========================= */
+
+.comment-form {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+/* =========================
+   COMMENT INPUT
+========================= */
+
+.comment-form input {
+    flex: 1;
+    min-width: 0;
+
+    padding: 10px 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: #0f1419;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.comment-form input::placeholder {
+    color: #536471;
+}
+
+.comment-form input:focus {
+    border-color: #1d9bf0;
+
+    box-shadow: 0 0 0 1px #1d9bf0;
+}
+
+
+/* =========================
+   COMMENT BUTTON
+========================= */
+
+.comment-form button {
+    flex-shrink: 0;
+
+    padding: 9px 16px;
+
+    border: none;
+    border-radius: 999px;
+
+    background: #1d9bf0;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s;
+}
+
+.comment-form button:hover {
+    background: #1a8cd8;
+}
+
+.comment-form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   COMMENTS LIST
+========================= */
+
+.comments-list {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}
+
+
+/* =========================
+   SINGLE COMMENT
+========================= */
+
+.comment {
+    display: flex;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 12px 0;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+/* =========================
+   COMMENT AVATAR
+========================= */
+
+.comment-avatar {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #1d9bf0;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   COMMENT BODY
+========================= */
+
+.comment-body {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* =========================
+   COMMENT HEADER
+========================= */
+
+.comment-header {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 0;
+}
+
+.comment-header strong {
+    color: #0f1419;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.comment-header span {
+    color: #536471;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   COMMENT TEXT
+========================= */
+
+.comment-body p {
+    margin: 5px 0 7px;
+
+    color: #0f1419;
+
+    font-size: 15px;
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
+/* =========================
+   DELETE BUTTON
+========================= */
+
+.comment-body button {
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    color: #536471;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: color 0.2s;
+}
+
+.comment-body button:hover {
+    color: #f4212e;
+}
+
+
+/* =========================
+   LOADING / EMPTY
+========================= */
+
+.comments-loading,
+.no-comments {
+    width: 100%;
+
+    padding: 18px 0;
+
+    box-sizing: border-box;
+
+    color: #536471;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+    .comment-section {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .comment-form {
+        gap: 6px;
+    }
+
+    .comment-form input {
+        font-size: 14px;
+        padding: 9px 12px;
+    }
+
+    .comment-form button {
+        padding: 9px 13px;
+    }
+}

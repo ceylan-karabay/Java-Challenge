@@ -1,0 +1,224 @@
+/* =========================
+   SEARCH WRAPPER
+========================= */
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   SEARCH BOX
+========================= */
+
+.search-box {
+    width: 100%;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    background-color: #eff3f4;
+
+    border: 1px solid transparent;
+    border-radius: 24px;
+
+    transition: all 0.2s ease;
+}
+
+
+/* Search icon */
+
+.search-icon {
+    margin-left: 16px;
+    margin-right: 10px;
+
+    font-size: 16px;
+
+    color: #536471;
+}
+
+
+/* Input */
+
+.search-box input {
+    flex: 1;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0 16px 0 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #0f1419;
+
+    font-size: 15px;
+}
+
+
+.search-box input::placeholder {
+    color: #536471;
+}
+
+
+/* Focus */
+
+.search-box:focus-within {
+    background-color: #ffffff;
+
+    border: 1px solid #1d9bf0;
+
+    box-shadow: 0 0 0 1px #1d9bf0;
+}
+
+
+/* =========================
+   SEARCH RESULTS
+========================= */
+
+.search-results {
+    position: absolute;
+
+    top: 52px;
+    left: 0;
+    right: 0;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e1e8ed;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    z-index: 1000;
+
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.search-message {
+    padding: 16px;
+
+    color: #536471;
+
+    font-size: 14px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   USER RESULT
+========================= */
+
+.search-user {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 16px;
+
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+
+.search-user:hover {
+    background-color: #f7f9f9;
+}
+
+
+/* =========================
+   USER AVATAR
+========================= */
+
+.search-user-avatar {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #1d9bf0;
+
+    color: white;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   USER INFO
+========================= */
+
+.search-user-info {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+
+.search-user-info strong {
+    color: #0f1419;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+.search-user-info span {
+    margin-top: 2px;
+
+    color: #536471;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 950px) {
+
+    .search-wrapper {
+        margin-top: 15px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .search-wrapper {
+        margin: 15px 0;
+    }
+
+    .search-box {
+        height: 42px;
+    }
+
+}

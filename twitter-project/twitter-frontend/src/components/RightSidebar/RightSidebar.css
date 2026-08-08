@@ -1,0 +1,168 @@
+.right-sidebar {
+    width: 100%;
+
+    padding: 0 15px;
+
+    box-sizing: border-box;
+
+    background: #15202b;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.right-sidebar-section {
+    margin-top: 20px;
+
+    padding: 16px;
+
+    background: #f7f9f9;
+
+    border-radius: 16px;
+}
+
+.right-sidebar-section h2 {
+    margin: 0 0 18px;
+
+    color: #0f1419;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   FOLLOW SUGGESTION
+========================= */
+
+.follow-suggestion {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 0;
+}
+
+.suggestion-avatar {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #1d9bf0;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+}
+
+.suggestion-info {
+    display: flex;
+    flex-direction: column;
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+.suggestion-info strong {
+    color: #0f1419;
+
+    font-size: 15px;
+}
+
+.suggestion-info span {
+    color: #536471;
+
+    font-size: 14px;
+}
+
+.follow-suggestion button {
+    border: none;
+
+    border-radius: 20px;
+
+    padding: 8px 14px;
+
+    background: #0f1419;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.follow-suggestion button:hover {
+    background: #272c30;
+}
+
+
+/* =========================
+   SHOW MORE
+========================= */
+
+.show-more {
+    margin-top: 12px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #1d9bf0;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   TRENDS
+========================= */
+
+.trend {
+    display: flex;
+    flex-direction: column;
+
+    padding: 12px 0;
+
+    cursor: pointer;
+}
+
+.trend:hover {
+    background: #eef1f1;
+}
+
+.trend span {
+    color: #536471;
+
+    font-size: 13px;
+}
+
+.trend strong {
+    margin-top: 3px;
+
+    color: #0f1419;
+
+    font-size: 15px;
+}
+
+.trend small {
+    margin-top: 3px;
+
+    color: #536471;
+
+    font-size: 13px;
+}

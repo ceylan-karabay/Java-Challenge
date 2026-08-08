@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LikeServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.service.impl</a> &gt; <span class="el_source">LikeServiceImpl.java</span></div><h1>LikeServiceImpl.java</h1><pre class="source lang-java linenums">package org.example.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.example.entity.Like;
+import org.example.entity.Tweet;
+import org.example.entity.User;
+import org.example.exception.BadRequestException;
+import org.example.repository.LikeRepository;
+import org.example.repository.TweetRepository;
+import org.example.repository.UserRepository;
+import org.example.service.AuthService;
+import org.example.service.LikeService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class LikeServiceImpl implements LikeService {
+
+    private final LikeRepository likeRepository;
+    private final TweetRepository tweetRepository;
+    private final UserRepository userRepository;
+    private final AuthService authService;
+
+    @Override
+    @Transactional
+    public void likeTweet(Long tweetId, String username) {
+<span class="fc" id="L28">        Long userId = authService.getUserIdByUsername(username);</span>
+
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (!tweetRepository.existsById(tweetId)) {</span>
+<span class="nc" id="L31">            throw new BadRequestException(&quot;Tweet bulunamadı: &quot; + tweetId);</span>
+        }
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (likeRepository.existsByUserIdAndTweetId(userId, tweetId)) {</span>
+<span class="fc" id="L35">            throw new BadRequestException(&quot;Bu tweet zaten beğenilmiş.&quot;);</span>
+        }
+
+
+<span class="fc" id="L39">        User user = userRepository.getReferenceById(userId);</span>
+<span class="fc" id="L40">        Tweet tweet = tweetRepository.getReferenceById(tweetId);</span>
+
+<span class="fc" id="L42">        Like like = Like.builder()</span>
+<span class="fc" id="L43">                .user(user)</span>
+<span class="fc" id="L44">                .tweet(tweet)</span>
+<span class="fc" id="L45">                .build();</span>
+
+<span class="fc" id="L47">        likeRepository.save(like);</span>
+<span class="fc" id="L48">    }</span>
+
+    @Override
+    @Transactional
+    public void unlikeTweet(Long tweetId, String username) {
+<span class="fc" id="L53">        Long userId = authService.getUserIdByUsername(username);</span>
+
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (!likeRepository.existsByUserIdAndTweetId(userId, tweetId)) {</span>
+<span class="nc" id="L56">            throw new BadRequestException(&quot;Bu tweet henüz beğenilmemiş.&quot;);</span>
+        }
+
+
+<span class="fc" id="L60">        likeRepository.deleteByUserIdAndTweetId(userId, tweetId);</span>
+<span class="fc" id="L61">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

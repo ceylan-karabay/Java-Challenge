@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.entity</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package org.example.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = &quot;users&quot;, schema = &quot;public&quot;)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = &quot;Kullanıcı adı boş olamaz.&quot;)
+    @Size(min = 3, max = 30, message = &quot;Kullanıcı adı 3 - 30 karakater arasında olmalıdır.&quot;)
+    @Column(nullable = false, unique = true, length = 30)
+    private String username;
+
+    @NotBlank(message = &quot;Email boş bırakılamaz.&quot;)
+    @Email(message = &quot;Geçerli bir email giriniz.&quot;)
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
+
+    @NotBlank(message = &quot;Şifre boş bırakılmaz&quot;)
+    @Column(nullable = false)
+    private String password;
+
+    @Column(length = 160)
+    private String bio;
+
+    @Column(name = &quot;profile_image_url&quot;)
+    private String profileImageUrl;
+
+    @Column(name = &quot;banner_image_url&quot;)
+    private String bannerImageUrl;
+
+    @Column(name = &quot;created_at&quot;, nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = &quot;updated_at&quot;)
+    private LocalDateTime updatedAt;
+
+    @Builder.Default
+    @OneToMany(mappedBy = &quot;user&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List&lt;Tweet&gt; tweets = new ArrayList&lt;&gt;();
+
+    @Builder.Default
+    @OneToMany(mappedBy = &quot;user&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List&lt;Comment&gt; comments = new ArrayList&lt;&gt;();
+
+    @Builder.Default
+    @OneToMany(mappedBy = &quot;user&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List&lt;Like&gt; likes = new ArrayList&lt;&gt;();
+
+    @PrePersist
+    protected void onCreate(){
+<span class="nc" id="L70">        this.createdAt = LocalDateTime.now();</span>
+<span class="nc" id="L71">    }</span>
+
+    @PreUpdate
+    protected void onUpdate() {
+<span class="nc" id="L75">        this.updatedAt = LocalDateTime.now();</span>
+<span class="nc" id="L76">    }</span>
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

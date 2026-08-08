@@ -1,0 +1,172 @@
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background-color: #15202b;
+
+    display: flex;
+    flex-direction: column;
+
+    position: sticky;
+    top: 0;
+
+    align-self: start;
+}
+
+
+/* LOGO */
+
+.sidebar-logo {
+    margin-bottom: 30px;
+
+    font-size: 36px;
+    font-weight: 700;
+
+    color: white;
+}
+
+
+/* MENU */
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 14px 16px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    border-radius: 30px;
+
+    font-size: 18px;
+    font-weight: 500;
+
+    transition: background-color 0.2s;
+}
+
+.sidebar-link:hover {
+    background-color: #192734;
+}
+
+.sidebar-link.active {
+    color: #1d9bf0;
+
+    font-weight: 700;
+}
+
+
+/* POST BUTTON */
+
+.sidebar-post-button {
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 30px;
+
+    background-color: #1d9bf0;
+
+    color: white;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.sidebar-post-button:hover {
+    background-color: #1a8cd8;
+}
+
+
+/* LOGOUT */
+
+.sidebar-logout {
+    margin-top: auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    border: none;
+    border-radius: 30px;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    text-align: left;
+}
+
+.sidebar-logout:hover {
+    background-color: #192734;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 220px;
+    }
+}
+
+@media (max-width: 650px) {
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+
+        position: relative;
+
+        padding: 10px;
+    }
+
+    .sidebar-logo {
+        margin-bottom: 10px;
+    }
+
+    .sidebar-menu {
+        flex-direction: row;
+
+        overflow-x: auto;
+    }
+
+    .sidebar-link {
+        padding: 10px 14px;
+
+        white-space: nowrap;
+    }
+
+    .sidebar-post-button {
+        margin-top: 10px;
+    }
+
+    .sidebar-logout {
+        margin-top: 10px;
+    }
+}

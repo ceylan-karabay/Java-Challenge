@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="tr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommentServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">twitter</a> &gt; <a href="index.source.html" class="el_package">org.example.service.impl</a> &gt; <span class="el_source">CommentServiceImpl.java</span></div><h1>CommentServiceImpl.java</h1><pre class="source lang-java linenums">package org.example.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.example.dto.comment.CommentCreateRequest;
+import org.example.dto.comment.CommentResponse;
+import org.example.dto.comment.CommentUpdateRequest;
+import org.example.dto.common.PagedResponse;
+import org.example.entity.Comment;
+import org.example.entity.Tweet;
+import org.example.entity.User;
+import org.example.exception.ResourceNotFoundException;
+import org.example.exception.UnauthorizedException;
+import org.example.mapper.CommentMapper;
+import org.example.repository.CommentRepository;
+import org.example.repository.TweetRepository;
+import org.example.repository.UserRepository;
+import org.example.service.CommentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class CommentServiceImpl implements CommentService {
+
+    private final CommentRepository commentRepository;
+    private final TweetRepository tweetRepository;
+    private final UserRepository userRepository;
+    private final CommentMapper commentMapper;
+
+    @Override
+    @Transactional
+    public CommentResponse createComment(CommentCreateRequest request, String username) {
+<span class="nc" id="L39">        User user = getUserByUsername(username);</span>
+
+<span class="nc" id="L41">        Tweet tweet = tweetRepository.findById(request.getTweetId())</span>
+<span class="nc" id="L42">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Tweet bulunamadı ID: &quot; + request.getTweetId()));</span>
+
+<span class="nc" id="L44">        Comment comment = commentMapper.toEntity(request);</span>
+<span class="nc" id="L45">        comment.setUser(user);</span>
+<span class="nc" id="L46">        comment.setTweet(tweet);</span>
+
+<span class="nc" id="L48">        Comment savedComment = commentRepository.save(comment);</span>
+<span class="nc" id="L49">        return commentMapper.toResponse(savedComment);</span>
+    }
+
+    @Override
+    @Transactional
+    public CommentResponse updateComment(Long commentId, CommentUpdateRequest request, String username) {
+<span class="fc" id="L55">        Comment comment = getCommentById(commentId);</span>
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (!comment.getUser().getUsername().equals(username)) {</span>
+<span class="fc" id="L58">            throw new UnauthorizedException(&quot;Bu yorumu güncelleme yetkiniz yok.&quot;);</span>
+        }
+
+<span class="fc" id="L61">        comment.setContent(request.getContent());</span>
+<span class="fc" id="L62">        Comment updatedComment = commentRepository.save(comment);</span>
+
+<span class="fc" id="L64">        return commentMapper.toResponse(updatedComment);</span>
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(Long commentId, String username) {
+<span class="fc" id="L70">        Comment comment = getCommentById(commentId);</span>
+
+<span class="fc" id="L72">        boolean isCommentOwner = comment.getUser().getUsername().equals(username);</span>
+<span class="fc" id="L73">        boolean isTweetOwner = comment.getTweet().getUser().getUsername().equals(username);</span>
+
+<span class="pc bpc" id="L75" title="1 of 4 branches missed.">        if (!isCommentOwner &amp;&amp; !isTweetOwner) {</span>
+<span class="fc" id="L76">            throw new UnauthorizedException(&quot;Bu yorumu silme yetkiniz yok.&quot;);</span>
+        }
+
+<span class="fc" id="L79">        commentRepository.delete(comment);</span>
+<span class="fc" id="L80">    }</span>
+    @Override
+    @Transactional(readOnly = true)
+    public PagedResponse&lt;CommentResponse&gt; getCommentsByTweetId(Long tweetId, int page, int size) {
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (!tweetRepository.existsById(tweetId)) {</span>
+<span class="nc" id="L86">            throw new ResourceNotFoundException(&quot;Tweet bulunamadı: &quot; + tweetId);</span>
+        }
+
+
+<span class="nc" id="L90">        Pageable pageable = PageRequest.of(page, size, Sort.by(&quot;createdAt&quot;).descending());</span>
+
+
+<span class="nc" id="L93">        Page&lt;Comment&gt; commentPage = commentRepository.findByTweetId(tweetId, pageable);</span>
+
+
+<span class="nc" id="L96">        List&lt;CommentResponse&gt; content = commentPage.getContent().stream()</span>
+<span class="nc" id="L97">                .map(commentMapper::toResponse)</span>
+<span class="nc" id="L98">                .toList();</span>
+
+
+<span class="nc" id="L101">        return new PagedResponse&lt;&gt;(</span>
+                content,
+<span class="nc" id="L103">                commentPage.getNumber(),</span>
+<span class="nc" id="L104">                commentPage.getSize(),</span>
+<span class="nc" id="L105">                commentPage.getTotalElements(),</span>
+<span class="nc" id="L106">                commentPage.getTotalPages(),</span>
+<span class="nc" id="L107">                commentPage.isLast()</span>
+        );
+    }
+
+
+    private User getUserByUsername(String username) {
+<span class="nc" id="L113">        return userRepository.findByUsername(username)</span>
+<span class="nc" id="L114">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Kullanıcı bulunamadı: &quot; + username));</span>
+    }
+
+    private Comment getCommentById(Long commentId) {
+<span class="fc" id="L118">        return commentRepository.findById(commentId)</span>
+<span class="pc" id="L119">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Yorum bulunamadı ID: &quot; + commentId));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
