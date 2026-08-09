@@ -6,6 +6,7 @@ function Register({
     switchToLogin,
 }) {
     const [formData, setFormData] = useState({
+        fullName: "",
         username: "",
         email: "",
         password: "",
@@ -31,8 +32,14 @@ function Register({
         setSuccess("");
 
         const username = formData.username.trim();
+        const fullName = formData.fullName.trim();
         const email = formData.email.trim();
         const password = formData.password;
+
+        if (!fullName) {
+            setError("Ad ve soyad giriniz.");
+            return;
+        }
 
         if (!username) {
             setError("Kullanıcı adı giriniz.");
@@ -77,6 +84,7 @@ function Register({
             );
 
             setFormData({
+                fullName: "",
                 username: "",
                 email: "",
                 password: "",
@@ -145,6 +153,15 @@ function Register({
                     {success}
                 </div>
             )}
+        <input
+            type="text"
+            name="fullName"
+            placeholder="Ad ve soyad"
+            value={formData.fullName}
+            onChange={handleChange}
+            disabled={loading}
+            style={inputStyle}
+        />
 
             <input
                 type="text"
