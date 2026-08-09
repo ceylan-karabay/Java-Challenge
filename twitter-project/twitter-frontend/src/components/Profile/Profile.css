@@ -1,12 +1,10 @@
 .profile {
     width: 100%;
     min-height: 100vh;
-    background-color: #ffffff;
+    background-color: red !important;
 }
 
-/* =========================
-   COVER
-========================= */
+/* COVER */
 
 .profile-cover {
     position: relative;
@@ -14,13 +12,10 @@
     background-color: #cfd9de;
 }
 
-/* =========================
-   AVATAR
-========================= */
+/* AVATAR */
 
 .profile-avatar {
     position: absolute;
-
     left: 20px;
     bottom: -65px;
 
@@ -29,11 +24,11 @@
 
     overflow: hidden;
 
-    border: 5px solid #ffffff;
+    border: 5px solid white;
     border-radius: 50%;
 
     background-color: #1d9bf0;
-    color: #ffffff;
+    color: white;
 
     display: flex;
     align-items: center;
@@ -51,9 +46,7 @@
     object-fit: cover;
 }
 
-/* =========================
-   PROFILE INFO
-========================= */
+/* PROFILE INFO */
 
 .profile-info {
     padding: 78px 20px 20px;
@@ -61,39 +54,29 @@
 
 .profile-info h1 {
     margin: 0;
-
     color: #0f1419;
-
     font-size: 22px;
     font-weight: 700;
 }
 
 .profile-username {
     margin: 4px 0 14px;
-
     color: #536471;
-
     font-size: 15px;
 }
 
 .profile-bio {
     margin: 12px 0;
-
     color: #0f1419;
-
     font-size: 15px;
     line-height: 1.5;
 }
 
-/* =========================
-   STATS
-========================= */
+/* STATS */
 
 .profile-stats {
     display: flex;
-
     gap: 25px;
-
     margin-top: 18px;
 }
 
@@ -112,14 +95,11 @@
     font-size: 15px;
 }
 
-/* =========================
-   TABS
-========================= */
+/* TABS */
 
 .profile-tabs {
     display: flex;
     width: 100%;
-
     border-bottom: 1px solid #eff3f4;
 }
 
@@ -136,7 +116,6 @@
 
     color: #536471;
 
-    font-family: inherit;
     font-size: 15px;
     font-weight: 600;
 
@@ -167,9 +146,7 @@
     background-color: #1d9bf0;
 }
 
-/* =========================
-   TWEETS
-========================= */
+/* TWEETS */
 
 .profile-tweets {
     width: 100%;
@@ -183,9 +160,7 @@
     color: #536471;
 }
 
-/* =========================
-   LOADING / ERROR
-========================= */
+/* LOADING / ERROR */
 
 .profile-loading,
 .profile-error {
