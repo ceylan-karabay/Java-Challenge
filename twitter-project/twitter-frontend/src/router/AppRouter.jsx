@@ -8,6 +8,7 @@ import {
 
 import AuthContainer from "../components/AuthContainer/AuthContainer";
 import Layout from "../components/Layout/Layout";
+import ProtectedRoute from "./ProtectedRoute";
 
 import Home from "../pages/Home";
 import FollowPage from "../pages/FollowPage";
@@ -17,6 +18,8 @@ function AppRouter() {
     return (
         <BrowserRouter>
             <Routes>
+
+                {/* GİRİŞ GEREKTİRMEYEN SAYFALAR */}
 
                 <Route
                     path="/login"
@@ -28,33 +31,44 @@ function AppRouter() {
                     element={<AuthPage />}
                 />
 
-                <Route element={<Layout />}>
 
-                    <Route
-                        path="/"
-                        element={<Home />}
-                    />
+                {/* GİRİŞ GEREKTİREN SAYFALAR */}
 
-                    <Route
-                        path="/home"
-                        element={<Home />}
-                    />
+                <Route element={<ProtectedRoute />}>
 
-                    <Route
-                        path="/follow"
-                        element={<FollowPage />}
-                    />
+                    <Route element={<Layout />}>
 
-                    <Route
-                        path="/profile"
-                        element={<ProfilePage />}
-                    />
-                  <Route
-                      path="/profile/:id"
-                      element={<ProfilePage />}
-                  />
+                        <Route
+                            path="/"
+                            element={<Home />}
+                        />
+
+                        <Route
+                            path="/home"
+                            element={<Home />}
+                        />
+
+                        <Route
+                            path="/follow"
+                            element={<FollowPage />}
+                        />
+
+                        <Route
+                            path="/profile"
+                            element={<ProfilePage />}
+                        />
+
+                        <Route
+                            path="/profile/:id"
+                            element={<ProfilePage />}
+                        />
+
+                    </Route>
 
                 </Route>
+
+
+                {/* BULUNAMAYAN SAYFALAR */}
 
                 <Route
                     path="*"
@@ -65,6 +79,7 @@ function AppRouter() {
         </BrowserRouter>
     );
 }
+
 
 function AuthPage() {
     const navigate = useNavigate();
