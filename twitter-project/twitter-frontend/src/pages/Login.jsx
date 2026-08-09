@@ -25,7 +25,7 @@ function Login({ onLoginSuccess, switchToRegister }) {
                 password,
             });
 
-            console.log("Login response:", response);
+           // console.log("Login response:", response);
 
             // apiClient response interceptor sayesinde
             // response artık doğrudan authData'dır.
