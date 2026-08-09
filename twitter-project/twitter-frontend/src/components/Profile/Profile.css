@@ -1,7 +1,12 @@
 .profile {
     width: 100%;
     min-height: 100vh;
-    background-color: #ffffff;
+    background-color: red !important;
+}
+
+.profile h1 {
+    color: black;
+    font-size: 40px;
 }
 
 /* COVER */

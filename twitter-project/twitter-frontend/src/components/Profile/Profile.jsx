@@ -6,6 +6,12 @@ import "./Profile.css";
 
 function Profile({ userId }) {
 
+    return (
+            <section className="profile">
+                <h1>PROFILE TEST</h1>
+            </section>
+        );
+
     const [user, setUser] = useState(null);
     const [tweets, setTweets] = useState([]);
     const [loading, setLoading] = useState(true);
