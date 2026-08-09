@@ -7,9 +7,15 @@ import "./Profile.css";
 function Profile({ userId }) {
 
     return (
-            <section className="profile">
-                <h1>PROFILE TEST</h1>
-            </section>
+           <section
+                   className="profile"
+                   style={{
+                       backgroundColor: "red",
+                       minHeight: "100vh"
+                   }}
+               >
+                   <h1>PROFILE TEST</h1>
+               </section>
         );
 
     const [user, setUser] = useState(null);
