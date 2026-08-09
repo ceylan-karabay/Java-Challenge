@@ -31,8 +31,8 @@ function Register({
         setError("");
         setSuccess("");
 
-        const username = formData.username.trim();
         const fullName = formData.fullName.trim();
+        const username = formData.username.trim();
         const email = formData.email.trim();
         const password = formData.password;
 
