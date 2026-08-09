@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import RightSidebar from "../RightSidebar/RightSidebar";
+import SearchBox from "../SearchBox/SearchBox";
 import "./Layout.css";
 
 function Layout() {
@@ -10,7 +11,13 @@ function Layout() {
             <Sidebar />
 
             <main className="layout-content">
+
+                <div className="mobile-search">
+                    <SearchBox />
+                </div>
+
                 <Outlet />
+
             </main>
 
             <RightSidebar />
@@ -18,5 +25,7 @@ function Layout() {
         </div>
     );
 }
+
+export default Layout;
 
 export default Layout;

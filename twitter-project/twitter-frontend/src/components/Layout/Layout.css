@@ -20,7 +20,9 @@
     border-left: 1px solid #38444d;
     border-right: 1px solid #38444d;
 }
-
+.mobile-search {
+    display: none;
+}
 
 /* TABLET */
 
@@ -47,6 +49,7 @@
 /* MOBİL */
 
 @media (max-width: 650px) {
+
     .layout {
         display: block;
     }
@@ -54,5 +57,10 @@
     .layout-content {
         width: 100%;
         border: none;
+    }
+
+    .mobile-search {
+        display: block;
+        padding: 0 15px;
     }
 }
