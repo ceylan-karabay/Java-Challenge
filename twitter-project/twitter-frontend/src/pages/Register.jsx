@@ -74,6 +74,7 @@ function Register({
             setLoading(true);
 
             await register({
+                fullName,
                 username,
                 email,
                 password,
