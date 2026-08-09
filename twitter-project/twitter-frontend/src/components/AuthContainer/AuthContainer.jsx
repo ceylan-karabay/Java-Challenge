@@ -29,8 +29,8 @@ function AuthContainer({ onAuthSuccess }) {
                         paddingTop: "24px",
                     }}
                 >
-                    <h1 style={{ color: "#1d9bf0" }}>
-                        Twitter Clone
+                    <h1 style={{ color: "white" }}>
+                        𝕏 Clone
                     </h1>
                 </div>
 
